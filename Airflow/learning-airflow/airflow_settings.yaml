@@ -1,0 +1,43 @@
+# This file allows you to configure Airflow Connections, Pools, and Variables in a single place for local development only.
+# NOTE: json dicts can be added to the conn_extra field as yaml key value pairs. See the example below.
+
+# For more information, refer to our docs: https://www.astronomer.io/docs/astro/cli/develop-project#configure-airflow_settingsyaml-local-development-only
+# For questions, reach out to: https://support.astronomer.io
+# For issues create an issue ticket here: https://github.com/astronomer/astro-cli/issues
+
+# This file is read by Astro CLI when you run `astro dev start`
+# It automatically creates Airflow Connections, Variables, and Pools
+# for LOCAL DEVELOPMENT ONLY (not production)
+
+airflow:
+  connections:
+
+    # ------------------------------------------------------------
+    # Filesystem connection used by FileSensor
+    # ------------------------------------------------------------
+    - conn_id: fs_default               # Name referenced in DAGs (fs_conn_id)
+      conn_type: fs                     # Filesystem connection type
+      conn_host:                        # Not used for filesystem
+      conn_schema:                     # Not used for filesystem
+      conn_login:                      # Not used for filesystem
+      conn_password:                   # Not used for filesystem
+      conn_port:                       # Not used for filesystem
+
+      conn_extra:
+        # Base path INSIDE the Airflow container
+        # This path is mounted from your Windows host:
+        # C:\Astro\Airflow\learning-airflow\include
+        path: /usr/local/airflow/include
+
+  # ------------------------------------------------------------
+  # Pools (optional, not needed for FileSensor)
+  # ------------------------------------------------------------
+  pools: []
+
+  # ------------------------------------------------------------
+  # Variables (optional)
+  # Can be read in DAGs using Variable.get("name")
+  # ------------------------------------------------------------
+  variables:
+    - variable_name: data_folder
+      variable_value: /usr/local/airflow/include

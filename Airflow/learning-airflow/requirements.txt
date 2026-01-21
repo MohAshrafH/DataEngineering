@@ -1,0 +1,51 @@
+# Add Python packages here, one per line. Pin versions where possible.
+
+# This line tells Python's package installer (pip) to install a specific library
+# from the public Python Package Index (PyPI) website when Airflow starts.
+
+# apache-airflow-providers-amazon
+# → This is the official Apache Airflow *Amazon (AWS) provider package*.
+# → It adds AWS-related components to Airflow, such as:
+#   - Operators (do tasks on AWS services like S3, Redshift, Glue)
+#   - Hooks (connect to AWS APIs securely)
+#   - Sensors (wait for events in AWS, such as a file appearing in S3)
+# → Without this package, Airflow cannot interact with AWS services.
+
+# ==9.19.0
+# → This pins the package to an exact version.
+# → It ensures the same behavior across all environments (local, test, prod).
+# → It prevents unexpected changes caused by automatic upgrades.
+
+# How this line is used:
+# 1. Airflow (or Astro) reads requirements.txt during startup or Docker build.
+# 2. pip goes to the PyPI website on the internet.
+# 3. pip downloads version 9.19.0 of the Amazon provider package.
+# 4. The package is installed into Airflow’s Python environment.
+
+apache-airflow-providers-amazon==9.19.0
+
+
+# Apache Airflow Snowflake provider
+# --------------------------------
+# This dependency installs the official Snowflake provider package for Apache Airflow.
+# Providers extend Airflow with integrations for external systems.
+#
+# Why this is needed:
+# - Enables Snowflake-specific components such as:
+#   - SnowflakeHook
+#   - SnowflakeOperator
+#   - SnowflakeSqlApiOperator
+# - Allows Airflow to recognize and use connections with conn_type = "snowflake"
+#
+# Why it must be in requirements.txt (not just pip install):
+# - Airflow runs inside a Linux environment (Docker / WSL / VM), not native Windows
+# - When using Docker or Astro CLI, containers are rebuilt or restarted frequently
+# - requirements.txt is used at container startup to reinstall all required packages
+# - Without this entry, the Snowflake provider would be lost on restart
+#
+# Version pinning rationale:
+# - The version is explicitly fixed (==6.8.1) to ensure compatibility
+#   with the installed Apache Airflow core version
+# - Prevents unexpected breaking changes from newer provider releases
+#
+apache-airflow-providers-snowflake==6.8.1
